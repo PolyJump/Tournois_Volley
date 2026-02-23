@@ -5,191 +5,256 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://*.supabase.co https://formspree.io; img-src 'self' data:; frame-ancestors 'none';" />
   <title>Polyjump – Tournoi de Volley Étudiant</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:      #08090d;
+      --bg: #08090d;
       --surface: #111218;
-      --s2:      #191b24;
-      --accent:  #f5c518;
-      --a2:      #ff6b35;
-      --text:    #f0f0f0;
-      --muted:   #6b7280;
-      --border:  rgba(245,197,24,0.15);
+      --s2: #191b24;
+      --accent: #f5c518;
+      --a2: #ff6b35;
+      --text: #f0f0f0;
+      --muted: #6b7280;
+      --border: rgba(245,197,24,0.15);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; padding-top: 70px; }
     body::before {
       content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     }
 
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(8,9,13,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    .navbar-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--accent); letter-spacing: 0.1em; text-decoration: none; }
+    .navbar-links { display: flex; gap: 1.5rem; }
+    .navbar-links a { color: #9ca3af; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+    .navbar-links a:hover { color: var(--accent); }
+
     /* HERO */
-    .hero { position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; overflow:hidden; }
-    .hero-bg { position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse 80% 60% at 50% 0%,rgba(245,197,24,.12) 0%,transparent 70%), radial-gradient(ellipse 50% 40% at 80% 80%,rgba(255,107,53,.08) 0%,transparent 60%); }
-    .court { position:absolute; inset:0; z-index:0; opacity:.06; overflow:hidden; }
-    .court svg { width:100%; height:100%; }
-    .hero-content { position:relative; z-index:2; }
-    .badge { display:inline-block; background:rgba(245,197,24,.12); border:1px solid rgba(245,197,24,.3); color:var(--accent); font-size:.75rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; padding:.35rem 1rem; border-radius:999px; margin-bottom:1.5rem; animation:fadeUp .6s ease both; }
-    .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(6rem,20vw,16rem); line-height:.9; letter-spacing:.02em; background:linear-gradient(160deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:fadeUp .7s ease .1s both; }
-    .hero-sub { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.5rem,4vw,3rem); letter-spacing:.15em; color:var(--a2); margin-top:.25rem; animation:fadeUp .7s ease .2s both; }
-    .hero-meta { display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; margin-top:2.5rem; animation:fadeUp .7s ease .3s both; }
-    .pill { display:flex; align-items:center; gap:.5rem; background:var(--surface); border:1px solid var(--border); border-radius:999px; padding:.5rem 1.2rem; font-size:.9rem; color:#c9cfd8; text-decoration:none; }
-    .pill-discord { background:rgba(88,101,242,.15); border-color:rgba(88,101,242,.35); color:#a5b4fc; }
-    .scroll-hint { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:.4rem; color:var(--muted); font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; animation:fadeUp 1s ease .8s both; }
-    .arrow { width:24px; height:24px; border-right:2px solid var(--muted); border-bottom:2px solid var(--muted); transform:rotate(45deg); animation:bounce 1.5s infinite; }
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,197,24,0.12) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 80%, rgba(255,107,53,0.08) 0%, transparent 60%); }
+    .court { position: absolute; inset: 0; z-index: 0; opacity: 0.06; overflow: hidden; }
+    .court svg { width: 100%; height: 100%; }
+    .hero-content { position: relative; z-index: 2; }
+    .badge { display: inline-block; background: rgba(245,197,24,0.12); border: 1px solid rgba(245,197,24,0.3); color: var(--accent); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.35rem 1rem; border-radius: 999px; margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(6rem, 20vw, 16rem); line-height: 0.9; letter-spacing: 0.02em; background: linear-gradient(160deg, #fff 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: fadeUp 0.7s ease 0.1s both; }
+    .hero-sub { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing: 0.15em; color: var(--a2); margin-top: 0.25rem; animation: fadeUp 0.7s ease 0.2s both; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2.5rem; animation: fadeUp 0.7s ease 0.3s both; }
+    .pill { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 0.5rem 1.2rem; font-size: 0.9rem; color: #c9cfd8; text-decoration: none; }
+    .pill-discord { background: rgba(88,101,242,0.15); border-color: rgba(88,101,242,0.35); color: #a5b4fc; }
+    .scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; animation: fadeUp 1s ease 0.8s both; }
+    .arrow { width: 24px; height: 24px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); animation: bounce 1.5s infinite; }
 
     /* LAYOUT */
-    .wrap { position:relative; z-index:2; padding:5rem 2rem; max-width:1000px; margin:0 auto; }
-    .lbl { font-size:.7rem; font-weight:600; letter-spacing:.25em; text-transform:uppercase; color:var(--accent); margin-bottom:.75rem; }
-    .ttl { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,4.5rem); line-height:1; margin-bottom:2rem; }
-    hr.div { border:none; height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); margin:0 2rem; }
+    .wrap { position: relative; z-index: 2; padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; }
+    .lbl { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+    .ttl { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1; margin-bottom: 2rem; }
+    hr.div { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 2rem; }
 
     /* COUNTDOWN */
-    .cd-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; max-width:600px; }
-    .cd-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.5rem .5rem; text-align:center; position:relative; overflow:hidden; }
-    .cd-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); }
-    .cd-n { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,4rem); color:var(--accent); line-height:1; }
-    .cd-l { font-size:.65rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-top:.3rem; }
+    .cd-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; max-width: 600px; }
+    .cd-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 0.5rem; text-align: center; position: relative; overflow: hidden; }
+    .cd-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .cd-n { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); color: var(--accent); line-height: 1; }
+    .cd-l { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
 
     /* INFO CARDS */
-    .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.25rem; margin-top:2rem; }
-    .info-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:1.75rem; transition:border-color .3s,transform .3s; }
-    .info-card:hover { border-color:rgba(245,197,24,.4); transform:translateY(-4px); }
-    .info-card .ico { font-size:2rem; margin-bottom:1rem; display:block; }
-    .info-card h3 { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.05em; color:var(--accent); margin-bottom:.5rem; }
-    .info-card p, .info-card ul { color:#9ca3af; font-size:.9rem; line-height:1.7; }
-    .info-card ul { list-style:none; }
-    .info-card ul li::before { content:'▸ '; color:var(--a2); }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 2rem; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; transition: border-color 0.3s, transform 0.3s; }
+    .info-card:hover { border-color: rgba(245,197,24,0.4); transform: translateY(-4px); }
+    .info-card .ico { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .info-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.5rem; }
+    .info-card p, .info-card ul { color: #9ca3af; font-size: 0.9rem; line-height: 1.7; }
+    .info-card ul { list-style: none; }
+    .info-card ul li::before { content: '▸ '; color: var(--a2); }
 
-    /* PLACES BANNER */
-    .places-wrap { position:relative; z-index:2; max-width:700px; margin:0 auto; padding:0 2rem 2rem; }
-    .places-box { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:1.25rem 1.75rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
-    .places-ttl { font-size:.7rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:.3rem; }
-    .places-n { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--text); }
-    .bar-wrap { flex:1; min-width:160px; }
-    .bar-track { height:8px; background:var(--s2); border-radius:999px; overflow:hidden; }
-    .bar-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--a2),var(--accent)); border-radius:999px; transition:width .8s ease; }
-    .bar-sub { font-size:.75rem; color:var(--muted); margin-top:.4rem; text-align:right; }
-
-    /* FORM */
-    .form-wrap { position:relative; z-index:2; padding:2rem 2rem 5rem; max-width:700px; margin:0 auto; }
-    .form-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; padding:2.5rem; position:relative; overflow:hidden; }
-    .form-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--a2),var(--accent)); }
-    .step { display:none; }
-    .step.on { display:block; }
-    .dots { display:flex; align-items:center; gap:.5rem; margin-bottom:2rem; }
-    .dot { width:8px; height:8px; border-radius:50%; background:var(--s2); border:1px solid var(--muted); transition:all .3s; }
-    .dot.on { background:var(--accent); border-color:var(--accent); transform:scale(1.3); }
-    .dot.done { background:var(--a2); border-color:var(--a2); }
-    .dot-line { flex:1; height:1px; background:var(--border); }
-    .sh { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:.05em; margin-bottom:1.5rem; }
-    .fg { margin-bottom:1.25rem; }
-    label { display:block; font-size:.82rem; font-weight:500; color:#9ca3af; margin-bottom:.4rem; letter-spacing:.05em; text-transform:uppercase; }
-    input[type=text], input[type=email] { width:100%; background:var(--s2); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:.85rem 1rem; color:var(--text); font-family:'DM Sans',sans-serif; font-size:.95rem; outline:none; transition:border-color .25s,box-shadow .25s; }
-    input:focus { border-color:rgba(245,197,24,.5); box-shadow:0 0 0 3px rgba(245,197,24,.08); }
-    input::placeholder { color:#4b5563; }
-    input.bad { border-color:#f87171 !important; }
-    .err { color:#f87171; font-size:.8rem; margin-top:.3rem; display:none; }
-    .err.on { display:block; }
-    .pblock { background:var(--s2); border:1px solid rgba(255,255,255,.05); border-radius:16px; padding:1.25rem; margin-bottom:.75rem; }
-    .pt { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.08em; color:var(--accent); margin-bottom:.75rem; display:flex; align-items:center; gap:.5rem; }
-    .pn { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; background:rgba(245,197,24,.15); border-radius:50%; font-size:.75rem; color:var(--accent); }
-    .frow { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
-    .pay-box { background:var(--s2); border:1px solid var(--border); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; text-align:center; }
-    .price { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; color:var(--accent); line-height:1; }
-    .price-d { font-size:.85rem; color:var(--muted); margin-top:.3rem; }
-    .pay-row { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; margin-top:1.25rem; }
-    .pbtn { display:inline-flex; align-items:center; gap:.5rem; padding:.7rem 1.5rem; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; cursor:pointer; border:none; transition:all .2s; text-decoration:none; }
-    .pbtn.prim { background:var(--accent); color:#000; }
-    .pbtn.prim:hover { background:#ffd740; transform:translateY(-2px); }
-    .pbtn.sec { background:transparent; border:1px solid var(--border); color:var(--text); }
-    .pbtn.sec:hover { border-color:rgba(245,197,24,.4); background:rgba(245,197,24,.05); }
-    .pstatus { display:none; background:rgba(245,197,24,.08); border:1px solid rgba(245,197,24,.3); border-radius:12px; padding:1rem; margin-bottom:1.25rem; font-size:.88rem; color:#d4aa00; text-align:center; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.9rem 2rem; border-radius:14px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:.95rem; cursor:pointer; border:none; transition:all .25s; }
-    .btn-p { background:linear-gradient(135deg,var(--accent),#e6b800); color:#000; width:100%; }
-    .btn-p:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,197,24,.25); }
-    .btn-p:disabled { opacity:.6; cursor:not-allowed; transform:none; }
-    .btn-g { background:transparent; border:1px solid var(--border); color:var(--muted); font-size:.85rem; padding:.6rem 1.2rem; }
-    .btn-g:hover { border-color:rgba(245,197,24,.3); color:var(--text); }
-    .ffoot { display:flex; gap:.75rem; align-items:center; margin-top:.75rem; }
-    .recap { background:var(--s2); border:1px solid var(--border); border-radius:16px; padding:1.25rem; margin-bottom:1.5rem; }
-    .recap h4 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:var(--accent); margin-bottom:.75rem; }
-    .prow { display:flex; align-items:center; gap:.75rem; padding:.4rem 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:.85rem; color:#c9cfd8; }
-    .prow:last-child { border-bottom:none; }
-    .success { display:none; text-align:center; padding:3rem 1rem; }
-    .success.on { display:block; }
-    .s-ico { font-size:4rem; margin-bottom:1rem; display:block; animation:pop .5s cubic-bezier(.175,.885,.32,1.275) both; }
-    .success h2 { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--accent); letter-spacing:.05em; }
+    /* PROGRAMME */
+    .timeline { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; }
+    .tl-item { display: flex; gap: 1.5rem; position: relative; }
+    .tl-item::before { content: ''; position: absolute; left: 55px; top: 2rem; bottom: -1px; width: 2px; background: var(--border); }
+    .tl-item:last-child::before { display: none; }
+    .tl-time { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--accent); min-width: 55px; padding-top: 0.85rem; text-align: right; flex-shrink: 0; }
+    .tl-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg); margin-top: 1.05rem; flex-shrink: 0; z-index: 1; box-shadow: 0 0 0 3px rgba(245,197,24,0.2); }
+    .tl-dot.muted { background: var(--s2); border-color: var(--border); box-shadow: none; }
+    .tl-content { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1rem 1.25rem; margin-bottom: 1rem; flex: 1; transition: border-color 0.25s; }
+    .tl-content:hover { border-color: rgba(245,197,24,0.3); }
+    .tl-content strong { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+    .tl-content span { font-size: 0.85rem; color: #9ca3af; }
+    .tl-badge { display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 999px; margin-left: 0.5rem; vertical-align: middle; }
+    .badge-sport { background: rgba(245,197,24,0.15); color: var(--accent); }
+    .badge-social { background: rgba(52,211,153,0.12); color: #34d399; }
+    .badge-cloture { background: rgba(255,107,53,0.12); color: var(--a2); }
 
     /* TEAMS */
-    .teams-head { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
-    .teams-cnt { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--muted); }
-    .teams-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:.75rem; margin-top:1.5rem; }
-    .tcard { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:1rem 1.2rem; display:flex; align-items:center; gap:.85rem; transition:border-color .25s,transform .25s; animation:fadeUp .4s ease both; }
-    .tcard:hover { border-color:rgba(245,197,24,.4); transform:translateY(-2px); }
-    .tnum { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--accent); min-width:2rem; text-align:center; }
-    .tinfo { flex:1; overflow:hidden; }
-    .tname { font-weight:600; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .pbadge { font-size:.68rem; font-weight:600; letter-spacing:.08em; padding:.2rem .55rem; border-radius:999px; margin-top:.2rem; display:inline-block; }
-    .p-online { background:rgba(52,211,153,.12); color:#34d399; }
-    .p-onsite { background:rgba(251,191,36,.12); color:#fbbf24; }
-    .empty-box { text-align:center; padding:3rem 1rem; color:var(--muted); font-size:.9rem; border:1px dashed rgba(255,255,255,.07); border-radius:16px; margin-top:1.5rem; }
+    .teams-head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .teams-cnt { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--muted); }
+    .teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
+    .tcard { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 0.85rem; transition: border-color 0.25s, transform 0.25s; animation: fadeUp 0.4s ease both; }
+    .tcard:hover { border-color: rgba(245,197,24,0.4); transform: translateY(-2px); }
+    .tnum { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--accent); min-width: 2rem; text-align: center; }
+    .tinfo { flex: 1; overflow: hidden; }
+    .tname { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .empty-box { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.9rem; border: 1px dashed rgba(255,255,255,0.07); border-radius: 16px; margin-top: 1.5rem; }
 
     /* SHARE */
-    .share-row { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.5rem; }
-    .sbtn { display:inline-flex; align-items:center; gap:.5rem; padding:.65rem 1.2rem; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600; cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--text); text-decoration:none; transition:all .2s; position:relative; }
-    .sbtn:hover { transform:translateY(-2px); border-color:rgba(245,197,24,.4); }
-    .sbtn.wa:hover { border-color:#25d366; color:#25d366; background:rgba(37,211,102,.08); }
-    .sbtn.tw:hover { border-color:#1d9bf0; color:#1d9bf0; background:rgba(29,155,240,.08); }
-    .toast { position:absolute; top:-2rem; left:50%; transform:translateX(-50%); background:var(--accent); color:#000; font-size:.72rem; font-weight:700; padding:.2rem .6rem; border-radius:6px; white-space:nowrap; opacity:0; transition:opacity .2s; pointer-events:none; }
-    .toast.on { opacity:1; }
+    .share-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+    .sbtn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.2rem; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; transition: all 0.2s; position: relative; }
+    .sbtn:hover { transform: translateY(-2px); border-color: rgba(245,197,24,0.4); }
+    .sbtn.wa:hover { border-color: #25d366; color: #25d366; background: rgba(37,211,102,0.08); }
+    .sbtn.tw:hover { border-color: #1d9bf0; color: #1d9bf0; background: rgba(29,155,240,0.08); }
+    .toast { position: absolute; top: -2rem; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+    .toast.on { opacity: 1; }
+
+    /* PLACES */
+    .places-wrap { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; padding: 0 2rem 2rem; }
+    .places-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .places-ttl { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+    .places-n { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--text); }
+    .bar-wrap { flex: 1; min-width: 160px; }
+    .bar-track { height: 8px; background: var(--s2); border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--a2), var(--accent)); border-radius: 999px; transition: width 0.8s ease; }
+    .bar-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; text-align: right; }
+
+    /* FORM */
+    .form-wrap { position: relative; z-index: 2; padding: 2rem 2rem 5rem; max-width: 700px; margin: 0 auto; }
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 2.5rem; position: relative; overflow: hidden; }
+    .form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--a2), var(--accent)); }
+    .step { display: none; }
+    .step.on { display: block; }
+    .dots { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--s2); border: 1px solid var(--muted); transition: all 0.3s; }
+    .dot.on { background: var(--accent); border-color: var(--accent); transform: scale(1.3); }
+    .dot.done { background: var(--a2); border-color: var(--a2); }
+    .dot-line { flex: 1; height: 1px; background: var(--border); }
+    .sh { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
+    .fg { margin-bottom: 1.25rem; }
+    label { display: block; font-size: 0.82rem; font-weight: 500; color: #9ca3af; margin-bottom: 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    input[type=text], input[type=email] { width: 100%; background: var(--s2); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0.85rem 1rem; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.25s, box-shadow 0.25s; }
+    input:focus { border-color: rgba(245,197,24,0.5); box-shadow: 0 0 0 3px rgba(245,197,24,0.08); }
+    input::placeholder { color: #4b5563; }
+    input.bad { border-color: #f87171 !important; }
+    .err { color: #f87171; font-size: 0.8rem; margin-top: 0.3rem; display: none; }
+    .err.on { display: block; }
+    .pblock { background: var(--s2); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; margin-bottom: 0.75rem; }
+    .pt { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .pn { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: rgba(245,197,24,0.15); border-radius: 50%; font-size: 0.75rem; color: var(--accent); }
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .mod-box { margin-top: 0.5rem; padding: 0.6rem 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+    .pay-box { background: var(--s2); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: center; }
+    .price { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--accent); line-height: 1; }
+    .price-d { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+    .pay-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.25rem; }
+    .pbtn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
+    .pbtn.prim { background: var(--accent); color: #000; }
+    .pbtn.prim:hover { background: #ffd740; transform: translateY(-2px); }
+    .pbtn.sec { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .pbtn.sec:hover { border-color: rgba(245,197,24,0.4); background: rgba(245,197,24,0.05); }
+    .pstatus { display: none; background: rgba(245,197,24,0.08); border: 1px solid rgba(245,197,24,0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem; font-size: 0.88rem; color: #d4aa00; text-align: center; }
+    .paypal-qr-box { display: none; margin-bottom: 1.25rem; background: rgba(245,197,24,0.06); border: 1px solid rgba(245,197,24,0.2); border-radius: 14px; padding: 1.25rem; }
+    .paypal-qr-ttl { font-size: 0.8rem; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; text-align: center; }
+    .paypal-qr-img { text-align: center; margin-bottom: 1.25rem; }
+    .paypal-qr-img img { max-width: 200px; border-radius: 12px; border: 2px solid var(--border); background: white; padding: 0.5rem; }
+    .paypal-ref-box { background: var(--s2); border-radius: 12px; padding: 1rem; }
+    .paypal-ref-txt { font-size: 0.875rem; color: #c9cfd8; line-height: 1.6; margin-bottom: 0.75rem; }
+    .paypal-ref-display { background: var(--bg); border-radius: 10px; padding: 0.65rem 1rem; font-family: monospace; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.05em; text-align: center; border: 1px solid rgba(245,197,24,0.2); }
+    .paypal-warn { font-size: 0.75rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.5; }
+    .pay-confirm-wrap { display: none; margin-bottom: 1.25rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.9rem 2rem; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; transition: all 0.25s; }
+    .btn-p { background: linear-gradient(135deg, var(--accent), #e6b800); color: #000; width: 100%; }
+    .btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,197,24,0.25); }
+    .btn-p:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-g { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.85rem; padding: 0.6rem 1.2rem; }
+    .btn-g:hover { border-color: rgba(245,197,24,0.3); color: var(--text); }
+    .ffoot { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.75rem; }
+    .recap { background: var(--s2); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; }
+    .recap h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--accent); margin-bottom: 0.75rem; }
+    .prow { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.85rem; color: #c9cfd8; }
+    .prow:last-child { border-bottom: none; }
+    .success { display: none; text-align: center; padding: 3rem 1rem; }
+    .success.on { display: block; }
+    .s-ico { font-size: 4rem; margin-bottom: 1rem; display: block; animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+    .success h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--accent); letter-spacing: 0.05em; }
+
+    /* GALERIE */
+    .gallery-pending { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.9rem; border: 1px dashed rgba(255,255,255,0.07); border-radius: 16px; margin-top: 1.5rem; }
 
     /* RESULTS */
-    .podium { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; align-items:end; margin:2rem 0 1.5rem; max-width:500px; }
-    .podbox { background:var(--surface); border:1px solid var(--border); border-radius:16px 16px 0 0; text-align:center; padding:1.25rem .75rem 1rem; position:relative; overflow:hidden; }
-    .podbox::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
-    .pod1::before { background:linear-gradient(90deg,var(--a2),var(--accent)); }
-    .pod2::before { background:#94a3b8; }
-    .pod3::before { background:#92400e; }
-    .pod1 { padding-top:2rem; }
-    .pod-medal { font-size:2rem; display:block; margin-bottom:.5rem; }
-    .pod-rank { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--accent); line-height:1; }
-    .pod-team { font-weight:600; font-size:.9rem; margin-top:.4rem; }
-    .pending-box { text-align:center; padding:3rem 1rem; color:var(--muted); font-size:.9rem; border:1px dashed rgba(255,255,255,.07); border-radius:16px; }
-    .rtable { width:100%; border-collapse:collapse; margin-top:1.5rem; font-size:.88rem; }
-    .rtable th { text-align:left; padding:.6rem .9rem; font-size:.68rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); }
-    .rtable td { padding:.75rem .9rem; border-bottom:1px solid rgba(255,255,255,.04); color:#c9cfd8; }
-    .rtable tr:last-child td { border-bottom:none; }
-    .rtable tr:hover td { background:rgba(245,197,24,.03); }
-    .rb { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; font-weight:700; font-size:.8rem; }
-    .rb1 { background:rgba(245,197,24,.2); color:var(--accent); }
-    .rb2 { background:rgba(148,163,184,.15); color:#94a3b8; }
-    .rb3 { background:rgba(146,64,14,.2); color:#d97706; }
-    .rbo { background:var(--s2); color:var(--muted); }
+    .podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: end; margin: 2rem 0 1.5rem; max-width: 500px; }
+    .podbox { background: var(--surface); border: 1px solid var(--border); border-radius: 16px 16px 0 0; text-align: center; padding: 1.25rem 0.75rem 1rem; position: relative; overflow: hidden; }
+    .podbox::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .pod1::before { background: linear-gradient(90deg, var(--a2), var(--accent)); }
+    .pod2::before { background: #94a3b8; }
+    .pod3::before { background: #92400e; }
+    .pod1 { padding-top: 2rem; }
+    .pod-medal { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .pod-rank { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--accent); line-height: 1; }
+    .pod-team { font-weight: 600; font-size: 0.9rem; margin-top: 0.4rem; }
+    .pending-box { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.9rem; border: 1px dashed rgba(255,255,255,0.07); border-radius: 16px; }
+    .rtable { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.88rem; }
+    .rtable th { text-align: left; padding: 0.6rem 0.9rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .rtable td { padding: 0.75rem 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: #c9cfd8; }
+    .rtable tr:last-child td { border-bottom: none; }
+    .rtable tr:hover td { background: rgba(245,197,24,0.03); }
+    .rb { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; font-size: 0.8rem; }
+    .rb1 { background: rgba(245,197,24,0.2); color: var(--accent); }
+    .rb2 { background: rgba(148,163,184,0.15); color: #94a3b8; }
+    .rb3 { background: rgba(146,64,14,0.2); color: #d97706; }
+    .rbo { background: var(--s2); color: var(--muted); }
 
-    footer { position:relative; z-index:2; text-align:center; padding:2rem; color:var(--muted); font-size:.8rem; border-top:1px solid var(--border); }
+    /* LEGAL */
+    .legal-page { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(8,9,13,0.95); backdrop-filter: blur(8px); overflow-y: auto; padding: 2rem; }
+    .legal-page.show { display: block; }
+    .legal-content { max-width: 800px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem; position: relative; }
+    .legal-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 32px; height: 32px; border-radius: 50%; background: var(--s2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); font-size: 1.2rem; transition: all 0.2s; }
+    .legal-close:hover { background: var(--border); color: var(--text); transform: rotate(90deg); }
+    .legal-h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 1.5rem; }
+    .legal-h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--text); letter-spacing: 0.05em; margin: 2rem 0 1rem; }
+    .legal-p { color: #9ca3af; font-size: 0.9rem; line-height: 1.7; margin-bottom: 1rem; }
+    .legal-ul { color: #9ca3af; font-size: 0.9rem; line-height: 1.7; margin-left: 1.5rem; margin-bottom: 1rem; }
+    .legal-ul li { margin-bottom: 0.5rem; }
+    .legal-strong { color: var(--text); font-weight: 600; }
+    .legal-box { background: rgba(245,197,24,0.05); border: 1px solid rgba(245,197,24,0.2); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .legal-box-title { font-weight: 700; color: var(--accent); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
 
-    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes bounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(6px)} }
-    @keyframes pop { from{opacity:0;transform:scale(.5)} to{opacity:1;transform:scale(1)} }
-    .reveal { opacity:0; transform:translateY(32px); transition:opacity .7s ease,transform .7s ease; }
-    .reveal.visible { opacity:1; transform:translateY(0); }
+    footer { position: relative; z-index: 2; text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
 
-    @media(max-width:520px){
-      .cd-grid{grid-template-columns:repeat(2,1fr)}
-      .frow{grid-template-columns:1fr}
-      .form-card{padding:1.5rem}
-      .teams-grid{grid-template-columns:1fr 1fr}
-      .podium{max-width:100%}
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%, 100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(6px); } }
+    @keyframes pop { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 520px) {
+      body { padding-top: 60px; }
+      .navbar { padding: 0.75rem 1rem; }
+      .navbar-links { gap: 0.75rem; }
+      .navbar-links a { font-size: 0.75rem; }
+      .cd-grid { grid-template-columns: repeat(2, 1fr); }
+      .frow { grid-template-columns: 1fr; }
+      .form-card { padding: 1.5rem; }
+      .teams-grid { grid-template-columns: 1fr 1fr; }
+      .podium { max-width: 100%; }
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════ HERO ═══════════════ -->
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="navbar-logo" href="#">POLYJUMP</a>
+  <div class="navbar-links">
+    <a href="#infos">Infos</a>
+    <a href="#programme">Programme</a>
+    <a href="#equipes">Équipes</a>
+    <a href="#inscription">S'inscrire</a>
+  </div>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="court">
@@ -219,7 +284,7 @@
   <div class="scroll-hint"><span>Découvrir</span><div class="arrow"></div></div>
 </section>
 
-<!-- ═══════════════ COUNTDOWN ═══════════════ -->
+<!-- COUNTDOWN -->
 <div class="wrap reveal">
   <p class="lbl">⏳ Compte à rebours</p>
   <h2 class="ttl">Le tournoi approche</h2>
@@ -233,8 +298,8 @@
 
 <hr class="div" />
 
-<!-- ═══════════════ INFOS ═══════════════ -->
-<div class="wrap reveal">
+<!-- INFOS -->
+<div class="wrap reveal" id="infos">
   <p class="lbl">📋 Infos pratiques</p>
   <h2 class="ttl">Tout savoir</h2>
   <div class="info-grid">
@@ -272,18 +337,54 @@
       <span class="ico">💬</span>
       <h3 style="color:#818cf8">Discord</h3>
       <p>Toutes les infos, le planning des matchs et les annonces seront sur notre serveur Discord.</p>
-      <a href="https://www.youtube.com/watch?v=RGHY4vCdowc" target="_blank"
-         style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:rgba(88,101,242,.15);border:1px solid rgba(88,101,242,.35);color:#a5b4fc;padding:.5rem 1.1rem;border-radius:999px;font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s"
-         onmouseover="this.style.background='rgba(88,101,242,.25)'" onmouseout="this.style.background='rgba(88,101,242,.15)'">
-        Rejoindre le serveur →
-      </a>
+      <a href="https://www.youtube.com/watch?v=RGHY4vCdowc" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:1rem;background:rgba(88,101,242,0.15);border:1px solid rgba(88,101,242,0.35);color:#a5b4fc;padding:0.5rem 1.1rem;border-radius:999px;font-size:0.85rem;font-weight:600;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='rgba(88,101,242,0.25)'" onmouseout="this.style.background='rgba(88,101,242,0.15)'">Rejoindre le serveur →</a>
     </div>
   </div>
 </div>
 
 <hr class="div" />
 
-<!-- ═══════════════ ÉQUIPES INSCRITES ═══════════════ -->
+<!-- PROGRAMME -->
+<div class="wrap reveal" id="programme">
+  <p class="lbl">🕐 Programme</p>
+  <h2 class="ttl">Le déroulé du soir</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">18h00</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content"><strong>Accueil des équipes <span class="tl-badge badge-sport">Sport</span></strong><span>Vérification des inscriptions, paiements sur place, échauffement libre.</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">18h30</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content"><strong>Lancement du tournoi <span class="tl-badge badge-sport">Sport</span></strong><span>Début des matchs de poules. Matchs de 15 minutes chronométrés.</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">19h30</div>
+      <div class="tl-dot muted"></div>
+      <div class="tl-content"><strong>Ouverture de la buvette <span class="tl-badge badge-social">Social</span></strong><span>Boissons et snacks disponibles tout au long de la soirée.</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">20h30</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content"><strong>Phases finales <span class="tl-badge badge-sport">Sport</span></strong><span>Quarts de finale, demi-finales. Le niveau monte !</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">21h30</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content"><strong>Grande Finale <span class="tl-badge badge-sport">Sport</span></strong><span>Les deux meilleures équipes s'affrontent pour le titre.</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">22h00</div>
+      <div class="tl-dot" style="background:var(--a2);box-shadow:0 0 0 3px rgba(255,107,53,0.2)"></div>
+      <div class="tl-content" style="border-color:rgba(255,107,53,0.2)"><strong>Podium & Clôture <span class="tl-badge badge-cloture">Clôture</span></strong><span>Remise des récompenses, photos souvenirs et fin de soirée 🏆</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="div" />
+
+<!-- ÉQUIPES -->
 <div class="wrap reveal" id="equipes">
   <div class="teams-head">
     <div>
@@ -297,11 +398,11 @@
 
 <hr class="div" />
 
-<!-- ═══════════════ PARTAGE ═══════════════ -->
+<!-- PARTAGE -->
 <div class="wrap reveal">
   <p class="lbl">📣 Partager</p>
   <h2 class="ttl">Invite tes amis</h2>
-  <p style="color:#9ca3af;font-size:.95rem;max-width:480px">Partage la page d'inscription avec tes coéquipiers ou tes adversaires !</p>
+  <p style="color:#9ca3af;font-size:0.95rem;max-width:480px">Partage la page d'inscription avec tes coéquipiers ou tes adversaires !</p>
   <div class="share-row">
     <a class="sbtn wa" id="sh-wa" href="#" target="_blank">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -325,7 +426,7 @@
 
 <hr class="div" />
 
-<!-- ═══════════════ PLACES ═══════════════ -->
+<!-- PLACES -->
 <div class="places-wrap reveal">
   <div class="places-box">
     <div>
@@ -339,7 +440,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ FORMULAIRE ═══════════════ -->
+<!-- FORM -->
 <div class="form-wrap" id="inscription">
   <p class="lbl">✍️ Inscription</p>
   <h2 class="ttl" style="margin-bottom:1.5rem">Inscrire mon équipe</h2>
@@ -354,7 +455,6 @@
     <!-- STEP 1 -->
     <div class="step on" id="s1">
       <div class="sh">1 — Votre équipe</div>
-      <!-- honeypot -->
       <div style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
         <input type="text" id="hp" tabindex="-1" autocomplete="off" />
       </div>
@@ -363,9 +463,7 @@
         <label for="tn">Nom de l'équipe *</label>
         <input type="text" id="tn" placeholder="Ex: Les Invincibles" maxlength="60" />
         <div class="err" id="e-tn">Ce champ est requis.</div>
-        <div style="margin-top:.5rem;padding:.6rem .85rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;font-size:.78rem;color:var(--muted);line-height:1.5;">
-          ⚠️ <strong style="color:#9ca3af">Modération</strong> — Tout nom d'équipe offensant, discriminatoire ou inapproprié entraînera une désinscription immédiate sans remboursement. Les organisateurs se réservent le droit de refuser ou supprimer toute inscription ne respectant pas ces conditions.
-        </div>
+        <div class="mod-box">⚠️ <strong style="color:#9ca3af">Modération</strong> — Tout nom d'équipe offensant, discriminatoire ou inapproprié entraînera une désinscription immédiate sans remboursement. Les organisateurs se réservent le droit de refuser ou supprimer toute inscription ne respectant pas ces conditions.</div>
       </div>
 
       <div class="pblock">
@@ -407,26 +505,27 @@
         <div class="price" id="price-lbl">10 €</div>
         <div class="price-d">par équipe (4 joueurs)</div>
         <div class="pay-row">
-          <a class="pbtn prim" id="pay-online" href="#" target="_blank" onclick="setPay('online')">💳 Payer via PayPal</a>
+          <button class="pbtn prim" onclick="setPay('online')">💳 Payer via PayPal</button>
           <button class="pbtn sec" onclick="setPay('onsite')">💵 Payer sur place</button>
         </div>
       </div>
 
-      <!-- PayPal reference instruction -->
-      <div id="paypal-instructions" style="display:none; margin-bottom:1.25rem; background:rgba(245,197,24,.06); border:1px solid rgba(245,197,24,.2); border-radius:14px; padding:1rem 1.2rem;">
-        <div style="font-size:.8rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;">📋 Important — Référence du virement</div>
-        <p style="font-size:.875rem;color:#c9cfd8;line-height:1.6;">Pour que votre paiement soit identifié, indiquez le <strong style="color:var(--text)">nom de votre équipe</strong> en référence du virement PayPal :</p>
-        <div style="margin-top:.65rem;background:var(--s2);border-radius:10px;padding:.6rem 1rem;font-family:monospace;font-size:.95rem;color:var(--accent);letter-spacing:.05em;" id="paypal-ref-display">—</div>
-        <p style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">Sans cette référence, votre paiement ne pourra pas être associé à votre équipe et votre inscription pourra être annulée.</p>
+      <div class="paypal-qr-box" id="paypal-box">
+        <div class="paypal-qr-ttl">📱 Scanner pour payer</div>
+        <div class="paypal-qr-img"><img id="qr-img" src="" alt="QR Code PayPal" /></div>
+        <div class="paypal-ref-box">
+          <p class="paypal-ref-txt"><strong style="color:var(--text)">1.</strong> Scannez le QR code avec votre smartphone<br/><strong style="color:var(--text)">2.</strong> Indiquez <strong style="color:var(--accent)">le nom de votre équipe</strong> en référence du virement :</p>
+          <div class="paypal-ref-display" id="ref-display">—</div>
+          <p class="paypal-warn">⚠️ Sans cette référence, votre paiement ne pourra pas être associé à votre équipe et votre inscription pourra être annulée.</p>
+        </div>
       </div>
 
-      <!-- Confirmation checkbox for online payment -->
-      <div id="pay-confirm-wrap" style="display:none; margin-bottom:1.25rem;">
-        <label style="display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;font-size:.88rem;color:var(--text);text-transform:none;letter-spacing:0;">
-          <input type="checkbox" id="pay-confirmed" style="width:auto;margin-top:.15rem;flex-shrink:0;" />
+      <div class="pay-confirm-wrap" id="pay-confirm">
+        <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0">
+          <input type="checkbox" id="pay-check" style="width:auto;margin-top:0.15rem;flex-shrink:0" />
           <span>Je confirme avoir effectué le virement PayPal avec le nom de mon équipe en référence. Je comprends que l'inscription ne sera validée qu'après vérification du paiement par les organisateurs.</span>
         </label>
-        <div class="err" id="e-pay-confirmed">Vous devez confirmer avoir effectué le paiement.</div>
+        <div class="err" id="e-pay-check">Vous devez confirmer avoir effectué le paiement.</div>
       </div>
 
       <div class="pstatus" id="pstat"></div>
@@ -441,8 +540,8 @@
       <div class="sh">3 — Confirmation</div>
       <div class="recap" id="recap-box"></div>
       <div class="fg" style="margin-bottom:1.5rem">
-        <label style="text-transform:none;font-size:.88rem;letter-spacing:0;color:var(--text);cursor:pointer">
-          <input type="checkbox" id="rglt" style="width:auto;margin-right:.5rem" />
+        <label style="text-transform:none;font-size:0.88rem;letter-spacing:0;color:var(--text);cursor:pointer">
+          <input type="checkbox" id="rglt" style="width:auto;margin-right:0.5rem" />
           J'accepte le règlement du tournoi et m'engage à respecter les règles du fair-play.
         </label>
         <div class="err" id="e-rglt">Vous devez accepter le règlement.</div>
@@ -458,17 +557,26 @@
       <span class="s-ico">🏆</span>
       <h2>Inscription validée !</h2>
       <p>Votre équipe <strong id="s-team"></strong> est bien inscrite au tournoi Polyjump.</p>
-      <p style="margin-top:.5rem;color:#9ca3af;font-size:.9rem">Un email de confirmation a été envoyé au <strong>capitaine</strong>. Pensez à transmettre les infos à vos coéquipiers !</p>
+      <p style="margin-top:0.5rem;color:#9ca3af;font-size:0.9rem">Un email de confirmation a été envoyé au <strong>capitaine</strong>. Pensez à transmettre les infos à vos coéquipiers !</p>
       <div class="recap" id="s-recap" style="margin-top:1.5rem;text-align:left"></div>
-      <p style="margin-top:1rem;color:#6b7280;font-size:.8rem">À bientôt le 26 mars 2026 à la salle du SUAPS ! 🏐</p>
+      <p style="margin-top:1rem;color:#6b7280;font-size:0.8rem">À bientôt le 26 mars 2026 à la salle du SUAPS ! 🏐</p>
     </div>
   </div>
 </div>
 
 <hr class="div" />
 
-<!-- ═══════════════ RÉSULTATS ═══════════════ -->
-<div class="wrap reveal">
+<!-- GALERIE -->
+<div class="wrap reveal" id="galerie">
+  <p class="lbl">📸 Galerie</p>
+  <h2 class="ttl">Photos du tournoi</h2>
+  <div id="gallery-pending" class="gallery-pending">📷 Les photos seront publiées ici après le tournoi le <strong>26 mars 2026</strong></div>
+</div>
+
+<hr class="div" />
+
+<!-- RÉSULTATS -->
+<div class="wrap reveal" id="resultats">
   <p class="lbl">🏆 Résultats</p>
   <h2 class="ttl">Classement final</h2>
   <div id="res-pending" class="pending-box">🎯 Les résultats seront affichés ici après le tournoi le <strong>26 mars 2026</strong></div>
@@ -481,287 +589,541 @@
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
   <p>🏐 <strong style="color:var(--accent)">POLYJUMP</strong> · Tournoi de Volley Étudiant · 26 mars 2026</p>
-  <p style="margin-top:.4rem">Salle de Volley — SUAPS · 18h30</p>
+  <p style="margin-top:0.4rem">Salle de Volley — SUAPS · 18h30</p>
+  <p style="margin-top:1rem;font-size:0.75rem;color:#6b7280">
+    <a href="#mentions" style="color:#9ca3af;text-decoration:none;margin:0 0.75rem" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#9ca3af'">Mentions Légales</a> · 
+    <a href="#rgpd" style="color:#9ca3af;text-decoration:none;margin:0 0.75rem" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#9ca3af'">Politique de Confidentialité</a> · 
+    <a href="#cgu" style="color:#9ca3af;text-decoration:none;margin:0 0.75rem" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#9ca3af'">CGU</a>
+  </p>
 </footer>
 
+<!-- LEGAL PAGES (content hidden for brevity - same as before) -->
+
 <script>
-  /* ══════════════════════════════════════════
-     CONFIG — modifie ces valeurs
-  ══════════════════════════════════════════ */
-  const TOURNAMENT_DATE    = new Date('2026-03-26T18:30:00');
-  const PRICE              = 10;
-  const PAYMENT_LINK       = '#'; // 🔧 Lien PayPal.me
-  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/VOTRE_ID'; // 🔧
-  const SUPABASE_URL       = 'https://qrixfbcqxcobwqfnnfrd.supabase.co';
-  const SUPABASE_KEY       = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyaXhmYmNxeGNvYndxZm5uZnJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjI3NTMsImV4cCI6MjA4Njg5ODc1M30.yl5w8ThDmX7zvRIWbgfh0cleoVIEO9TYxrAcBV04EK0';
-  const MAX_TEAMS          = 16; // 🔧
-  const PAGE_URL           = window.location.href.split('?')[0];
+  // CONFIG
+  const TOURNAMENT_DATE = new Date('2026-03-26T18:30:00');
+  const PRICE = 10;
+  const PAYPAL_QR_CODE = 'paypal-qr.png';
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/VOTRE_ID';
+  const SUPABASE_URL = 'https://qrixfbcqxcobwqfnnfrd.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyaXhmYmNxeGNvYndxZm5uZnJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjI3NTMsImV4cCI6MjA4Njg5ODc1M30.yl5w8ThDmX7zvRIWbgfh0cleoVIEO9TYxrAcBV04EK0';
+  const MAX_TEAMS = 16;
+  const PAGE_URL = window.location.href.split('?')[0];
+  const RESULTS = [];
+  
+  const SB_DEMO = SUPABASE_URL.includes('VOTRE_PROJET');
+  const FS_DEMO = FORMSPREE_ENDPOINT.includes('VOTRE_ID');
 
-  // 🔧 Résultats après le tournoi (laisser vide avant)
-  const RESULTS = [
-    // { rank:1, team:'Les Invincibles', wins:5, losses:0 },
-    // { rank:2, team:'Spike Masters',   wins:4, losses:1 },
-  ];
-
-  /* ══ FLAGS ══ */
-  const SB_DEMO  = SUPABASE_URL.includes('VOTRE_PROJET');
-  const FS_DEMO  = FORMSPREE_ENDPOINT.includes('VOTRE_ID');
-
-  /* ══ SÉCURITÉ ══ */
-  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;'); }
-  function clean(s,max=80){ return String(s||'').trim().slice(0,max).replace(/[<>]/g,''); }
-  function isEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-  function checkRate(){
-    const now=Date.now(), k='pj_r';
-    let a=[];
-    try{ a=JSON.parse(sessionStorage.getItem(k)||'[]').filter(t=>now-t<600000); }catch(e){}
-    if(a.length>=3) return false;
+  // SECURITY
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;'); }
+  function clean(s, max=80) { return String(s||'').trim().slice(0,max).replace(/[<>]/g,''); }
+  function isEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+  function checkRate() {
+    const now = Date.now(), k = 'pj_r';
+    let a = [];
+    try { a = JSON.parse(sessionStorage.getItem(k)||'[]').filter(t=>now-t<600000); } catch(e) {}
+    if (a.length >= 3) return false;
     a.push(now);
-    try{ sessionStorage.setItem(k,JSON.stringify(a)); }catch(e){}
+    try { sessionStorage.setItem(k, JSON.stringify(a)); } catch(e) {}
     return true;
   }
 
-  /* ══ SUPABASE ══ */
-  async function sb(path,opts={}){
-    const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...opts,headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':opts.prefer||'',...(opts.headers||{})}});
-    if(!r.ok) throw new Error('SB '+r.status);
-    const t=await r.text(); return t?JSON.parse(t):null;
+  // SUPABASE
+  async function sb(path, opts={}) {
+    const r = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
+      ...opts,
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': opts.prefer || '',
+        ...(opts.headers || {})
+      }
+    });
+    if (!r.ok) throw new Error('SB ' + r.status);
+    const t = await r.text();
+    return t ? JSON.parse(t) : null;
   }
 
-  /* ══ COUNTDOWN ══ */
-  function tick(){
-    const d=TOURNAMENT_DATE-new Date();
-    if(d<=0){['cd-j','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00');return;}
-    document.getElementById('cd-j').textContent=String(Math.floor(d/86400000)).padStart(2,'0');
-    document.getElementById('cd-h').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');
-    document.getElementById('cd-m').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');
-    document.getElementById('cd-s').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0');
-  }
-  tick(); setInterval(tick,1000);
-
-  /* ══ PLACES ══ */
-  async function loadPlaces(){
-    if(SB_DEMO){
-      document.getElementById('pl-n').textContent=MAX_TEAMS+' places';
-      document.getElementById('pl-sub').textContent='0 / '+MAX_TEAMS+' équipes inscrites';
+  // COUNTDOWN
+  function tick() {
+    const d = TOURNAMENT_DATE - new Date();
+    if (d <= 0) {
+      ['cd-j','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00');
       return;
     }
-    try{
-      const r=await fetch(SUPABASE_URL+'/rest/v1/inscriptions?select=id',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'count=exact','Range':'0-0'}});
-      const cr=r.headers.get('content-range');
-      const total=cr?parseInt(cr.split('/')[1])||0:0;
-      const left=Math.max(0,MAX_TEAMS-total);
-      const pct=Math.min(100,(total/MAX_TEAMS)*100);
-      document.getElementById('pl-n').textContent=left+' place'+(left>1?'s':'')+' restante'+(left>1?'s':'');
-      document.getElementById('pl-sub').textContent=total+' / '+MAX_TEAMS+' équipes inscrites';
-      document.getElementById('pl-bar').style.width=pct+'%';
-      if(left===0){
-        document.getElementById('pl-n').style.color='#f87171';
-        document.getElementById('pl-bar').style.background='#f87171';
-        document.getElementById('fc').innerHTML='<div style="text-align:center;padding:3rem 1rem"><span style="font-size:3rem">🔒</span><h2 style="font-family:\'Bebas Neue\',sans-serif;font-size:2.5rem;color:#f87171;margin:1rem 0 .5rem">Complet !</h2><p style="color:var(--muted)">Toutes les places sont prises. Rejoignez le Discord pour les désistements.</p></div>';
-      }else if(left<=3){
-        document.getElementById('pl-n').style.color='var(--a2)';
+    document.getElementById('cd-j').textContent = String(Math.floor(d/86400000)).padStart(2,'0');
+    document.getElementById('cd-h').textContent = String(Math.floor(d%86400000/3600000)).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(Math.floor(d%3600000/60000)).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(Math.floor(d%60000/1000)).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  // PLACES
+  async function loadPlaces() {
+    if (SB_DEMO) {
+      document.getElementById('pl-n').textContent = MAX_TEAMS + ' places';
+      document.getElementById('pl-sub').textContent = '0 / ' + MAX_TEAMS + ' équipes inscrites';
+      return;
+    }
+    try {
+      const r = await fetch(SUPABASE_URL+'/rest/v1/inscriptions?select=id', {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Prefer': 'count=exact',
+          'Range': '0-0'
+        }
+      });
+      const cr = r.headers.get('content-range');
+      const total = cr ? parseInt(cr.split('/')[1])||0 : 0;
+      const left = Math.max(0, MAX_TEAMS - total);
+      const pct = Math.min(100, (total/MAX_TEAMS)*100);
+      document.getElementById('pl-n').textContent = left + ' place' + (left>1?'s':'') + ' restante' + (left>1?'s':'');
+      document.getElementById('pl-sub').textContent = total + ' / ' + MAX_TEAMS + ' équipes inscrites';
+      document.getElementById('pl-bar').style.width = pct + '%';
+      if (left === 0) {
+        document.getElementById('pl-n').style.color = '#f87171';
+        document.getElementById('pl-bar').style.background = '#f87171';
+        document.getElementById('fc').innerHTML = '<div style="text-align:center;padding:3rem 1rem"><span style="font-size:3rem">🔒</span><h2 style="font-family:\'Bebas Neue\',sans-serif;font-size:2.5rem;color:#f87171;margin:1rem 0 .5rem">Complet !</h2><p style="color:var(--muted)">Toutes les places sont prises. Rejoignez le Discord pour les désistements.</p></div>';
+      } else if (left <= 3) {
+        document.getElementById('pl-n').style.color = 'var(--a2)';
       }
-    }catch(e){ document.getElementById('pl-n').textContent='--'; document.getElementById('pl-sub').textContent='Supabase non configuré'; }
+    } catch(e) {
+      document.getElementById('pl-n').textContent = '--';
+      document.getElementById('pl-sub').textContent = 'Supabase non configuré';
+    }
   }
   loadPlaces();
 
-  /* ══ TEAMS LIST ══ */
-  async function loadTeams(){
-    const box=document.getElementById('teams-box');
-    const cnt=document.getElementById('teams-cnt');
-    if(SB_DEMO){
-      box.innerHTML='<div class="empty-box">🔧 Configure Supabase pour voir les équipes inscrites</div>';
-      cnt.textContent='0 équipe'; return;
+  // TEAMS
+  async function loadTeams() {
+    const box = document.getElementById('teams-box');
+    const cnt = document.getElementById('teams-cnt');
+    if (SB_DEMO) {
+      box.innerHTML = '<div class="empty-box">🔧 Configure Supabase pour voir les équipes inscrites</div>';
+      cnt.textContent = '0 équipe';
+      return;
     }
-    try{
-      const teams=await sb('inscriptions?select=team_name,created_at&order=created_at.asc');
-      const n=teams?teams.length:0;
-      cnt.textContent=n+' équipe'+(n>1?'s':'');
-      if(!n){ box.innerHTML='<div class="empty-box">🏐 Soyez la première équipe à vous inscrire !</div>'; return; }
-      box.innerHTML='<div class="teams-grid">'+teams.map((t,i)=>{
-        return '<div class="tcard" style="animation-delay:'+(i*.05)+'s"><div class="tnum">'+(i+1)+'</div><div class="tinfo"><div class="tname">'+esc(t.team_name)+'</div></div></div>';
-      }).join('')+'</div>';
-    }catch(e){ box.innerHTML='<div class="empty-box">Impossible de charger les équipes.</div>'; }
+    try {
+      const teams = await sb('inscriptions?select=team_name,created_at&order=created_at.asc');
+      const n = teams ? teams.length : 0;
+      cnt.textContent = n + ' équipe' + (n>1?'s':'');
+      if (!n) {
+        box.innerHTML = '<div class="empty-box">🏐 Soyez la première équipe à vous inscrire !</div>';
+        return;
+      }
+      box.innerHTML = '<div class="teams-grid">' + teams.map((t,i) => 
+        '<div class="tcard" style="animation-delay:'+(i*0.05)+'s"><div class="tnum">'+(i+1)+'</div><div class="tinfo"><div class="tname">'+esc(t.team_name)+'</div></div></div>'
+      ).join('') + '</div>';
+    } catch(e) {
+      box.innerHTML = '<div class="empty-box">Impossible de charger les équipes.</div>';
+    }
   }
   loadTeams();
 
-  /* ══ SHARE ══ */
-  document.getElementById('sh-wa').href='https://wa.me/?text='+encodeURIComponent('🏐 Inscris ton équipe au tournoi Polyjump ! 26 mars 2026 — SUAPS\n👉 '+PAGE_URL);
-  document.getElementById('sh-tw').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('Je participe au tournoi de volley étudiant Polyjump le 26 mars ! 🏐 '+PAGE_URL);
-  if(navigator.share) document.getElementById('sh-native').style.display='inline-flex';
-  function copyLink(b){ navigator.clipboard.writeText(PAGE_URL).then(()=>{ const t=document.getElementById('cp-toast'); t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2000); }); }
-  function nativeShare(){ navigator.share({title:'Polyjump — Tournoi Volley',url:PAGE_URL}); }
+  // SHARE
+  document.getElementById('sh-wa').href = 'https://wa.me/?text=' + encodeURIComponent('🏐 Inscris ton équipe au tournoi Polyjump ! 26 mars 2026 — SUAPS\n👉 ' + PAGE_URL);
+  document.getElementById('sh-tw').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Je participe au tournoi de volley étudiant Polyjump le 26 mars ! 🏐 ' + PAGE_URL);
+  if (navigator.share) document.getElementById('sh-native').style.display = 'inline-flex';
+  function copyLink(b) {
+    navigator.clipboard.writeText(PAGE_URL).then(() => {
+      const t = document.getElementById('cp-toast');
+      t.classList.add('on');
+      setTimeout(() => t.classList.remove('on'), 2000);
+    });
+  }
+  function nativeShare() { navigator.share({title:'Polyjump — Tournoi Volley', url:PAGE_URL}); }
 
-  /* ══ RESULTS ══ */
-  (function(){
-    if(!RESULTS||!RESULTS.length) return;
-    document.getElementById('res-pending').style.display='none';
-    document.getElementById('res-content').style.display='block';
-    const m=['🥇','🥈','🥉'], top=RESULTS.slice(0,3);
-    const po=[top[1],top[0],top[2]], pc=['pod2','pod1','pod3'];
-    document.getElementById('podium').innerHTML=po.map((t,i)=>{
-      if(!t) return '<div></div>';
-      const rk=i===1?1:i===0?2:3;
+  // RESULTS
+  if (RESULTS && RESULTS.length) {
+    document.getElementById('res-pending').style.display = 'none';
+    document.getElementById('res-content').style.display = 'block';
+    const m = ['🥇','🥈','🥉'], top = RESULTS.slice(0,3);
+    const po = [top[1],top[0],top[2]], pc = ['pod2','pod1','pod3'];
+    document.getElementById('podium').innerHTML = po.map((t,i) => {
+      if (!t) return '<div></div>';
+      const rk = i===1?1:i===0?2:3;
       return '<div class="podbox '+pc[i]+'"><span class="pod-medal">'+m[rk-1]+'</span><div class="pod-rank">'+rk+'</div><div class="pod-team">'+esc(t.team)+'</div></div>';
     }).join('');
-    document.getElementById('res-tbody').innerHTML=RESULTS.map(r=>{
-      const rc=r.rank<=3?'rb'+r.rank:'rbo';
+    document.getElementById('res-tbody').innerHTML = RESULTS.map(r => {
+      const rc = r.rank<=3?'rb'+r.rank:'rbo';
       return '<tr><td><span class="rb '+rc+'">'+r.rank+'</span></td><td style="font-weight:600;color:var(--text)">'+esc(r.team)+'</td><td style="color:#34d399">'+r.wins+'</td><td style="color:#f87171">'+r.losses+'</td><td style="color:var(--accent);font-weight:600">'+(r.wins*3)+'</td></tr>';
     }).join('');
-  })();
+  }
 
-  /* ══ FORM ══ */
-  document.getElementById('price-lbl').textContent=PRICE+' €';
-  document.getElementById('pay-online').href=PAYMENT_LINK;
-  let payChoice=null;
+  // FORM
+  document.getElementById('price-lbl').textContent = PRICE + ' €';
+  let payChoice = null;
 
-  function gostep(n){
-    document.querySelectorAll('.step').forEach(s=>s.classList.remove('on'));
+  function gostep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('on'));
     document.getElementById('s'+n).classList.add('on');
-    for(let i=1;i<=3;i++){
-      const d=document.getElementById('d'+i);
+    for (let i = 1; i <= 3; i++) {
+      const d = document.getElementById('d'+i);
       d.classList.remove('on','done');
-      if(i<n) d.classList.add('done');
-      else if(i===n) d.classList.add('on');
+      if (i < n) d.classList.add('done');
+      else if (i === n) d.classList.add('on');
     }
   }
 
-  function setErr(fid,eid,cond){
-    const f=document.getElementById(fid), e=document.getElementById(eid);
-    if(cond){ f.classList.add('bad'); e.classList.add('on'); return false; }
-    f.classList.remove('bad'); e.classList.remove('on'); return true;
+  function setErr(fid, eid, cond) {
+    const f = document.getElementById(fid), e = document.getElementById(eid);
+    if (cond) {
+      f.classList.add('bad');
+      e.classList.add('on');
+      return false;
+    }
+    f.classList.remove('bad');
+    e.classList.remove('on');
+    return true;
   }
 
-  function step2(){
-    if(document.getElementById('hp').value) return;
-    let ok=true;
-    ok=setErr('tn','e-tn',!document.getElementById('tn').value.trim())&&ok;
-    [[1,'n'],[1,'e'],[2,'n'],[2,'e'],[3,'n'],[3,'e'],[4,'n'],[4,'e']].forEach(([p,t])=>{
-      const id='p'+p+t, eid='e-p'+p+t;
-      if(t==='n') ok=setErr(id,eid,!document.getElementById(id).value.trim())&&ok;
-      else ok=setErr(id,eid,!isEmail(document.getElementById(id).value.trim()))&&ok;
+  function step2() {
+    if (document.getElementById('hp').value) return;
+    let ok = true;
+    ok = setErr('tn', 'e-tn', !document.getElementById('tn').value.trim()) && ok;
+    [['p1n','e-p1n'],['p1e','e-p1e'],['p2n','e-p2n'],['p2e','e-p2e'],['p3n','e-p3n'],['p3e','e-p3e'],['p4n','e-p4n'],['p4e','e-p4e']].forEach(([fid,eid]) => {
+      const val = document.getElementById(fid).value.trim();
+      if (fid.includes('e')) ok = setErr(fid, eid, !isEmail(val)) && ok;
+      else ok = setErr(fid, eid, !val) && ok;
     });
-    if(ok) gostep(2);
+    if (ok) gostep(2);
   }
 
-  function setPay(m){
-    payChoice=m;
-    const s=document.getElementById('pstat');
-    const instr=document.getElementById('paypal-instructions');
-    const confirmWrap=document.getElementById('pay-confirm-wrap');
-    const refEl=document.getElementById('paypal-ref-display');
-    if(m==='online'){
-      // Show PayPal reference instructions
-      const teamName=document.getElementById('tn').value.trim()||'[Nom de votre équipe]';
-      refEl.textContent=teamName;
-      instr.style.display='block';
-      confirmWrap.style.display='block';
-      s.style.display='none';
+  function setPay(m) {
+    payChoice = m;
+    const s = document.getElementById('pstat');
+    const box = document.getElementById('paypal-box');
+    const confirmWrap = document.getElementById('pay-confirm');
+    const refEl = document.getElementById('ref-display');
+    const qrImg = document.getElementById('qr-img');
+    
+    if (m === 'online') {
+      const teamName = document.getElementById('tn').value.trim() || '[Nom de votre équipe]';
+      refEl.textContent = teamName;
+      qrImg.src = PAYPAL_QR_CODE;
+      box.style.display = 'block';
+      confirmWrap.style.display = 'block';
+      s.style.display = 'none';
     } else {
-      instr.style.display='none';
-      confirmWrap.style.display='none';
-      s.style.display='block';
-      s.style.color='#d4aa00'; s.style.borderColor='rgba(245,197,24,.3)'; s.style.background='rgba(245,197,24,.08)';
-      s.textContent='💵 Paiement sur place. Règlement à l\'accueil le 26 mars.';
+      box.style.display = 'none';
+      confirmWrap.style.display = 'none';
+      s.style.display = 'block';
+      s.style.color = '#d4aa00';
+      s.style.borderColor = 'rgba(245,197,24,0.3)';
+      s.style.background = 'rgba(245,197,24,0.08)';
+      s.textContent = '💵 Paiement sur place. Règlement à l\'accueil le 26 mars.';
     }
   }
 
-  async function step3(){
-    if(!payChoice){
-      const s=document.getElementById('pstat');
-      s.style.display='block'; s.style.color='#f87171'; s.style.borderColor='rgba(248,113,113,.3)'; s.style.background='rgba(248,113,113,.05)';
-      s.textContent='⚠️ Veuillez choisir un mode de paiement.'; return;
+  async function step3() {
+    if (!payChoice) {
+      const s = document.getElementById('pstat');
+      s.style.display = 'block';
+      s.style.color = '#f87171';
+      s.style.borderColor = 'rgba(248,113,113,0.3)';
+      s.style.background = 'rgba(248,113,113,0.05)';
+      s.textContent = '⚠️ Veuillez choisir un mode de paiement.';
+      return;
     }
-    // Check payment confirmation checkbox for online payment
-    if(payChoice==='online'){
-      const confirmed=document.getElementById('pay-confirmed').checked;
-      if(!confirmed){
-        document.getElementById('e-pay-confirmed').classList.add('on'); return;
+    
+    if (payChoice === 'online') {
+      const confirmed = document.getElementById('pay-check').checked;
+      if (!confirmed) {
+        document.getElementById('e-pay-check').classList.add('on');
+        return;
       }
-      document.getElementById('e-pay-confirmed').classList.remove('on');
+      document.getElementById('e-pay-check').classList.remove('on');
     }
-    const btn=document.getElementById('btn-s3');
-    btn.disabled=true; btn.textContent='⏳ Vérification...';
-    const team=document.getElementById('tn').value.trim();
-    const emails=[1,2,3,4].map(i=>document.getElementById('p'+i+'e').value.trim());
-    let dup=null;
-    if(!SB_DEMO){
-      try{
-        const nc=await sb('inscriptions?team_name=eq.'+encodeURIComponent(team)+'&select=team_name');
-        if(nc&&nc.length>0){ dup='team'; }
-        else{
-          const ef=emails.map(e=>'captain_email.eq.'+encodeURIComponent(e)).join(',');
-          const ec=await sb('inscriptions?or=('+ef+')&select=captain_email');
-          if(ec&&ec.length>0) dup='email';
+
+    const btn = document.getElementById('btn-s3');
+    btn.disabled = true;
+    btn.textContent = '⏳ Vérification...';
+
+    const team = document.getElementById('tn').value.trim();
+    const emails = ['p1e','p2e','p3e','p4e'].map(id => document.getElementById(id).value.trim());
+
+    let dup = null;
+    if (!SB_DEMO) {
+      try {
+        const nc = await sb('inscriptions?team_name=eq.' + encodeURIComponent(team) + '&select=team_name');
+        if (nc && nc.length > 0) {
+          dup = 'team';
+        } else {
+          const ef = emails.map(e => 'captain_email.eq.' + encodeURIComponent(e)).join(',');
+          const ec = await sb('inscriptions?or=(' + ef + ')&select=captain_email');
+          if (ec && ec.length > 0) dup = 'email';
         }
-      }catch(e){}
+      } catch(e) {}
     }
-    btn.disabled=false; btn.textContent='Confirmer →';
-    if(dup==='team'){
-      const s=document.getElementById('pstat');
-      s.style.display='block'; s.style.color='#f87171'; s.style.borderColor='rgba(248,113,113,.3)'; s.style.background='rgba(248,113,113,.05)';
-      s.textContent="⚠️ Ce nom d'équipe est déjà pris !"; return;
+
+    btn.disabled = false;
+    btn.textContent = 'Confirmer →';
+
+    if (dup === 'team') {
+      const s = document.getElementById('pstat');
+      s.style.display = 'block';
+      s.style.color = '#f87171';
+      s.style.borderColor = 'rgba(248,113,113,0.3)';
+      s.style.background = 'rgba(248,113,113,0.05)';
+      s.textContent = "⚠️ Ce nom d'équipe est déjà pris !";
+      return;
     }
-    if(dup==='email'){
-      const s=document.getElementById('pstat');
-      s.style.display='block'; s.style.color='#f87171'; s.style.borderColor='rgba(248,113,113,.3)'; s.style.background='rgba(248,113,113,.05)';
-      s.textContent="⚠️ Un de ces emails est déjà inscrit !"; return;
+    if (dup === 'email') {
+      const s = document.getElementById('pstat');
+      s.style.display = 'block';
+      s.style.color = '#f87171';
+      s.style.borderColor = 'rgba(248,113,113,0.3)';
+      s.style.background = 'rgba(248,113,113,0.05)';
+      s.textContent = "⚠️ Un de ces emails est déjà inscrit !";
+      return;
     }
-    buildRecap(); gostep(3);
+
+    buildRecap();
+    gostep(3);
   }
 
-  function buildRecap(){
-    const team=clean(document.getElementById('tn').value);
-    const pl=[1,2,3,4].map((i,idx)=>({name:clean(document.getElementById('p'+i+'n').value),email:clean(document.getElementById('p'+i+'e').value,120),cap:idx===0}));
-    const plbl=payChoice==='online'?'💳 En ligne':'💵 Sur place';
-    let h='<h4>🏐 '+esc(team)+'</h4>';
-    pl.forEach((p,i)=>{ h+='<div class="prow"><span class="pn">'+(i+1)+'</span><span style="flex:1">'+esc(p.name)+(p.cap?' <span style="color:var(--accent);font-size:.75rem">(Cap.)</span>':'')+'</span><span style="color:var(--muted)">'+esc(p.email)+'</span></div>'; });
-    h+='<div class="prow" style="margin-top:.5rem;color:var(--muted)"><span>💰</span><span>Paiement</span><span>'+esc(plbl)+' · '+PRICE+' €</span></div>';
-    document.getElementById('recap-box').innerHTML=h;
+  function buildRecap() {
+    const team = clean(document.getElementById('tn').value);
+    const pl = ['p1n','p2n','p3n','p4n'].map((id,idx) => ({
+      name: clean(document.getElementById(id).value),
+      email: clean(document.getElementById(id.replace('n','e')).value, 120),
+      cap: idx === 0
+    }));
+    const plbl = payChoice === 'online' ? '💳 En ligne' : '💵 Sur place';
+    let h = '<h4>🏐 ' + esc(team) + '</h4>';
+    pl.forEach((p,i) => {
+      h += '<div class="prow"><span class="pn">' + (i+1) + '</span><span style="flex:1">' + esc(p.name) + (p.cap ? ' <span style="color:var(--accent);font-size:0.75rem">(Cap.)</span>' : '') + '</span><span style="color:var(--muted)">' + esc(p.email) + '</span></div>';
+    });
+    h += '<div class="prow" style="margin-top:0.5rem;color:var(--muted)"><span>💰</span><span>Paiement</span><span>' + esc(plbl) + ' · ' + PRICE + ' €</span></div>';
+    document.getElementById('recap-box').innerHTML = h;
   }
 
-  async function submit(){
-    if(!document.getElementById('rglt').checked){ document.getElementById('e-rglt').classList.add('on'); return; }
+  async function submit() {
+    if (!document.getElementById('rglt').checked) {
+      document.getElementById('e-rglt').classList.add('on');
+      return;
+    }
     document.getElementById('e-rglt').classList.remove('on');
-    if(!checkRate()){ alert('Trop de tentatives. Merci de patienter quelques minutes.'); return; }
-    const btn=document.getElementById('btn-sub');
-    btn.disabled=true; btn.textContent='⏳ Envoi en cours...';
-    const team=clean(document.getElementById('tn').value);
-    const players=[1,2,3,4].map((i,idx)=>({name:clean(document.getElementById('p'+i+'n').value),email:clean(document.getElementById('p'+i+'e').value,120),role:idx===0?'Capitaine':'Joueur '+(idx+1)}));
-    if(!SB_DEMO){
-      try{
-        await sb('inscriptions',{method:'POST',prefer:'return=minimal',body:JSON.stringify({team_name:team,captain_name:players[0].name,captain_email:players[0].email,player2_name:players[1].name,player2_email:players[1].email,player3_name:players[2].name,player3_email:players[2].email,player4_name:players[3].name,player4_email:players[3].email,payment_method:payChoice})});
-      }catch(e){ btn.disabled=false; btn.textContent="🏐 Valider l'inscription"; alert("Erreur d'enregistrement. Vérifiez votre connexion."); return; }
+
+    // Check capacity
+    if (!SB_DEMO) {
+      try {
+        const r = await fetch(SUPABASE_URL+'/rest/v1/inscriptions?select=id', {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Prefer': 'count=exact',
+            'Range': '0-0'
+          }
+        });
+        const cr = r.headers.get('content-range');
+        const total = cr ? parseInt(cr.split('/')[1])||0 : 0;
+        if (total >= MAX_TEAMS) {
+          alert('Désolé, le tournoi est complet ! Toutes les places ont été prises.');
+          return;
+        }
+      } catch(e) {}
     }
-    if(!FS_DEMO){
-      try{
-        const ap={_subject:'[Polyjump] Inscription : '+team,'Equipe':team,'Paiement':payChoice==='online'?'En ligne':'Sur place'};
-        players.forEach(p=>{ ap[p.role]=p.name+' — '+p.email; });
-        await fetch(FORMSPREE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(ap)});
-        const cap=players[0];
-        await fetch(FORMSPREE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_replyto:cap.email,email:cap.email,_subject:'[Polyjump] Confirmation — '+team,'Bonjour':cap.name,'Equipe':team,'Joueurs':players.map(p=>p.name+' ('+p.role+')').join(', '),'Date':'26 mars 2026 à 18h30','Lieu':'Salle de Volley — SUAPS','Paiement':payChoice==='online'?'En ligne':'Sur place',_template:'table'})});
-      }catch(e){ console.warn('Formspree',e); }
+
+    if (!checkRate()) {
+      alert('Trop de tentatives. Merci de patienter quelques minutes.');
+      return;
     }
-    let h='<h4>🏐 '+esc(team)+'</h4>';
-    players.forEach((p,i)=>{ h+='<div class="prow"><span class="pn">'+(i+1)+'</span><span style="flex:1">'+esc(p.name)+(i===0?' <span style="color:var(--accent);font-size:.75rem">(Cap.)</span>':'')+'</span><span style="color:var(--muted)">'+esc(p.email)+'</span></div>'; });
-    h+='<div class="prow" style="margin-top:.5rem"><span>📅</span><span>Tournoi</span><span style="color:var(--accent)">26 mars 2026 · 18h30 · SUAPS</span></div>';
-    document.getElementById('s-team').textContent=team;
-    document.getElementById('s-recap').innerHTML=h;
-    document.getElementById('dots').style.display='none';
+
+    const btn = document.getElementById('btn-sub');
+    btn.disabled = true;
+    btn.textContent = '⏳ Envoi en cours...';
+
+    const team = clean(document.getElementById('tn').value);
+    const players = ['p1n','p2n','p3n','p4n'].map((id,idx) => ({
+      name: clean(document.getElementById(id).value),
+      email: clean(document.getElementById(id.replace('n','e')).value, 120),
+      role: idx === 0 ? 'Capitaine' : 'Joueur ' + (idx+1)
+    }));
+
+    if (!SB_DEMO) {
+      try {
+        await sb('inscriptions', {
+          method: 'POST',
+          prefer: 'return=minimal',
+          body: JSON.stringify({
+            team_name: team,
+            captain_name: players[0].name,
+            captain_email: players[0].email,
+            player2_name: players[1].name,
+            player2_email: players[1].email,
+            player3_name: players[2].name,
+            player3_email: players[2].email,
+            player4_name: players[3].name,
+            player4_email: players[3].email,
+            payment_method: payChoice
+          })
+        });
+      } catch(e) {
+        btn.disabled = false;
+        btn.textContent = "🏐 Valider l'inscription";
+        alert("Erreur d'enregistrement. Vérifiez votre connexion.");
+        return;
+      }
+    }
+
+    if (!FS_DEMO) {
+      try {
+        const ap = {
+          _subject: '[Polyjump] Inscription : ' + team,
+          'Equipe': team,
+          'Paiement': payChoice === 'online' ? 'En ligne' : 'Sur place'
+        };
+        players.forEach(p => { ap[p.role] = p.name + ' — ' + p.email; });
+        await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(ap)
+        });
+
+        const cap = players[0];
+        await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _replyto: cap.email,
+            email: cap.email,
+            _subject: '[Polyjump] Confirmation — ' + team,
+            'Bonjour': cap.name,
+            'Equipe': team,
+            'Joueurs': players.map(p => p.name + ' (' + p.role + ')').join(', '),
+            'Date': '26 mars 2026 à 18h30',
+            'Lieu': 'Salle de Volley — SUAPS',
+            'Paiement': payChoice === 'online' ? 'En ligne' : 'Sur place',
+            _template: 'table'
+          })
+        });
+      } catch(e) { console.warn('Formspree', e); }
+    }
+
+    let h = '<h4>🏐 ' + esc(team) + '</h4>';
+    players.forEach((p,i) => {
+      h += '<div class="prow"><span class="pn">' + (i+1) + '</span><span style="flex:1">' + esc(p.name) + (i===0 ? ' <span style="color:var(--accent);font-size:0.75rem">(Cap.)</span>' : '') + '</span><span style="color:var(--muted)">' + esc(p.email) + '</span></div>';
+    });
+    h += '<div class="prow" style="margin-top:0.5rem"><span>📅</span><span>Tournoi</span><span style="color:var(--accent)">26 mars 2026 · 18h30 · SUAPS</span></div>';
+    document.getElementById('s-team').textContent = team;
+    document.getElementById('s-recap').innerHTML = h;
+    document.getElementById('dots').style.display = 'none';
     document.getElementById('s3').classList.remove('on');
     document.getElementById('success').classList.add('on');
-    document.getElementById('fc').scrollIntoView({behavior:'smooth',block:'center'});
-    loadPlaces(); loadTeams();
+    document.getElementById('fc').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    loadPlaces();
+    loadTeams();
   }
 
-  /* ══ SCROLL REVEAL ══ */
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
-  },{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  // LEGAL (minimal implementations)
+  function openLegal(page) {
+    // Would implement legal pages here
+  }
+
+  // SCROLL REVEAL
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
+
 </body>
 </html>
+
+<!-- MENTIONS LÉGALES -->
+<div class="legal-page" id="mentions">
+  <div class="legal-content">
+    <div class="legal-close" onclick="closeLegal('mentions')">×</div>
+    <h1 class="legal-h1">Mentions Légales</h1>
+    <h2 class="legal-h2">1. Éditeur du site</h2>
+    <div class="legal-box">
+      <div class="legal-box-title">🔧 À compléter obligatoirement</div>
+      <p class="legal-p"><span class="legal-strong">Nom & Prénom :</span> [Ton nom complet ou nom de l'association]<br/><span class="legal-strong">Adresse :</span> [Adresse postale complète]<br/><span class="legal-strong">Email :</span> [ton-email@example.com]</p>
+    </div>
+    <h2 class="legal-h2">2. Hébergeur</h2>
+    <p class="legal-p"><span class="legal-strong">Hébergeur :</span> GitHub, Inc.<br/><span class="legal-strong">Adresse :</span> 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis<br/><span class="legal-strong">Site web :</span> <a href="https://github.com" target="_blank" style="color:var(--accent)">github.com</a></p>
+    <h2 class="legal-h2">3. Directeur de la publication</h2>
+    <p class="legal-p">Le directeur de la publication est : <span class="legal-strong">[Ton nom]</span>, en qualité de responsable du tournoi Polyjump.</p>
+  </div>
+</div>
+
+<!-- RGPD -->
+<div class="legal-page" id="rgpd">
+  <div class="legal-content">
+    <div class="legal-close" onclick="closeLegal('rgpd')">×</div>
+    <h1 class="legal-h1">Politique de Confidentialité (RGPD)</h1>
+    <h2 class="legal-h2">1. Responsable du traitement</h2>
+    <div class="legal-box">
+      <div class="legal-box-title">🔧 À compléter obligatoirement</div>
+      <p class="legal-p"><span class="legal-strong">Responsable :</span> [Ton nom ou nom de l'association]<br/><span class="legal-strong">Email :</span> [ton-email@example.com]</p>
+    </div>
+    <h2 class="legal-h2">2. Données collectées</h2>
+    <p class="legal-p">Lors de votre inscription au tournoi Polyjump, nous collectons :</p>
+    <ul class="legal-ul">
+      <li>Nom de l'équipe (visible publiquement)</li>
+      <li>Noms et prénoms des joueurs (4 par équipe)</li>
+      <li>Adresses email des joueurs</li>
+      <li>Mode de paiement choisi</li>
+    </ul>
+    <h2 class="legal-h2">3. Vos droits</h2>
+    <p class="legal-p">Vous disposez des droits d'accès, de rectification, d'effacement et de portabilité. Pour exercer ces droits, contactez-nous à : <span class="legal-strong">[ton-email@example.com]</span></p>
+  </div>
+</div>
+
+<!-- CGU -->
+<div class="legal-page" id="cgu">
+  <div class="legal-content">
+    <div class="legal-close" onclick="closeLegal('cgu')">×</div>
+    <h1 class="legal-h1">Conditions Générales d'Utilisation</h1>
+    <h2 class="legal-h2">1. Inscription</h2>
+    <ul class="legal-ul">
+      <li>Réservé aux étudiants</li>
+      <li>Équipes de 4 joueurs</li>
+      <li>Inscription validée après paiement</li>
+    </ul>
+    <h2 class="legal-h2">2. Tarif et paiement</h2>
+    <p class="legal-p">10 € par équipe. Paiement en ligne (PayPal avec référence obligatoire) ou sur place le jour J.</p>
+    <h2 class="legal-h2">3. Modération</h2>
+    <p class="legal-p">Tout nom d'équipe offensant entraîne une désinscription sans remboursement.</p>
+  </div>
+</div>
+
+<script>
+  function closeLegal(page) {
+    document.getElementById(page).classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  
+  if(window.location.hash) {
+    const page = window.location.hash.substring(1);
+    if(['mentions','rgpd','cgu'].includes(page)) {
+      setTimeout(() => {
+        document.getElementById(page).classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }, 100);
+    }
+  }
+  
+  window.addEventListener('hashchange', () => {
+    const page = window.location.hash.substring(1);
+    if(['mentions','rgpd','cgu'].includes(page)) {
+      document.getElementById(page).classList.add('show');
+      document.body.style.overflow = 'hidden';
+    } else {
+      ['mentions','rgpd','cgu'].forEach(p => closeLegal(p));
+    }
+  });
+</script>
+
